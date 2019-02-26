@@ -3,7 +3,7 @@
 # lurk lite: A "lightweight™" version of lurk.
 #
 
-import argparse, configparser, os, miniirc, re, sys, tempcmds
+import argparse, configparser, os, miniirc, re, sys, tempcmds, time
 
 # Process arguments
 _parser = argparse.ArgumentParser()
@@ -95,6 +95,15 @@ def handle_privmsg(irc, hostmask, args):
     _ignores = prefs[irc].get('ignored')
     if global_ignores.match(h) or (_ignores and _ignores.match(h)):
         return
+
+    # Update the Discord server count
+    if 'next_update' in prefs[irc] and time.time() > prefs[irc]['next_update']:
+        c = irc.get_server_count()
+        irc.quote('AWAY', ':{} guild{}. | {}help'.format(
+            c, '' if c == 1 else 's', commands.prefix
+        ), tags = {'+discordapp.com/type': 'watching'})
+        irc.debug('Updated Discord status text.')
+        prefs[irc]['next_update'] = time.time() + 60
 
     # [off] handling
     msg = args[-1][1:]
@@ -221,6 +230,7 @@ if 'discord' in config:
 
     # Add the ignores list
     _add_extras(c, irc)
+    prefs[irc]['next_update'] = 0
 
 # Mass connect
 for name in _servers:
