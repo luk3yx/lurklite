@@ -61,6 +61,11 @@ def _cmd_tempcmd(irc, hostmask, is_admin, args):
     # Handle the arguments
     cmd_type = None
     params = args[-1].split(' ', 2)
+
+    if len(params) > 1 and params[0] == 'add':
+        cmd_type = False
+        del params[0]
+
     if len(params) == 3:
         if tempcmds.command_type_exists(params[1]):
             cmd, cmd_type, code = params
@@ -74,7 +79,7 @@ def _cmd_tempcmd(irc, hostmask, is_admin, args):
     log = prefs.get(irc, {}).get('tempcmd_log')
 
     # Delete tempcmds
-    if not cmd_type and cmd in ('del', 'delete', 'remove'):
+    if cmd_type is None and cmd in ('del', 'delete', 'remove'):
         if code.startswith(tempcmd_db.prefix):
             r_cmd = repr(code)
             cmd   = code[len(tempcmd_db.prefix):]

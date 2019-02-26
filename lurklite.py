@@ -113,7 +113,7 @@ def handle_privmsg(irc, hostmask, args):
         )
 
     # Remove any leading/trailing spaces
-    msg      = msg.strip()
+    msg      = msg.strip(' \t\r\n')
     args[-1] = ':' + msg
     msg      = msg.lower()
 
@@ -234,7 +234,7 @@ del c, irc, kwargs, _servers
 
 # miniirc update reminder™
 if miniirc.ver < (1,0,8):
-    print('You are not running the latest version of miniirc.')
+    print('You are not running the latest version of miniirc™.')
 
 # Nuke more unused variables
 del argparse, _args
