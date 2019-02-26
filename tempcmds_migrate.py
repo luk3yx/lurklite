@@ -1,16 +1,16 @@
 #!/usr/bin/python3
 #
-# Migrate the old repr-based file to the new JSON-based one.
+# Migrate the old repr-based file to the new msgpack or JSON-based one.
 #
 
 import ast
 
 try:
     from msgpack import dumps
-    t = 'msgpack'
+    _t = 'msgpack'
 except ImportError:
     import json
-    t = 'JSON'
+    _t = 'JSON'
     dumps = lambda data : json.dumps(data).encode('utf-8')
 
 def migrate(file):
@@ -23,11 +23,8 @@ def migrate(file):
             ' already been converted?')
         return False
 
-    print('Converting commands list to {}...'.format(t))
+    print('Converting commands list to {}...'.format(_t))
     data = dumps(data)
-
-    if type(data) == str:
-        data = data.encode('utf-8')
 
     print('Writing commands back to the file...')
     with open(file, 'wb') as f:

@@ -101,6 +101,11 @@ def _cmd_tempcmd(irc, hostmask, is_admin, args):
     else:
         r_cmd = repr(tempcmd_db.prefix + cmd)
 
+    # Make sure the command is not a non-tempcmd
+    if cmd.lower() in commands:
+        return irc.msg(args[0], hostmask[0] + ': The command ' + rcmd +
+            ' already exists as a normal command!')
+
     # Add the command
     verb = 'updated' if cmd in tempcmd_db else 'created'
     c = {'code': code}

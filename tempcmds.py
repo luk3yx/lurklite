@@ -3,9 +3,6 @@
 # Command handler - Processes commands
 #
 
-# The requests module is (very) nice, however my potato takes a while to import
-#   it.
-
 import json, os, re, threading, time, urllib.request
 from urllib.parse import quote as web_quote
 
