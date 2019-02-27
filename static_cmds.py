@@ -48,6 +48,16 @@ def _cmd_privs(irc, hostmask, is_admin, args):
     else:
         irc.msg(args[0], '{}: You are not an admin!'.format(hostmask[0]))
 
+# Get a tempcmd name
+def _get_tempcmd_name(cmd):
+    if cmd.startswith(tempcmd_db.prefix):
+        r_cmd = repr(cmd)
+        cmd   = cmd[len(tempcmd_db.prefix):]
+    else:
+        r_cmd = repr(tempcmd_db.prefix + cmd)
+
+    return cmd, r_cmd
+
 # Add and remove "tempcmds"
 @register_command('tempcmd', 'tempcmds', requires_admin = True)
 def _cmd_tempcmd(irc, hostmask, is_admin, args):
@@ -64,7 +74,11 @@ def _cmd_tempcmd(irc, hostmask, is_admin, args):
 
     if len(params) > 1 and params[0] == 'add':
         cmd_type = False
-        del params[0]
+
+        if len(params) == 3:
+            params = [params[1], params[2].split(' ', 1)]
+        else:
+            del params[0]
 
     if len(params) == 3:
         if tempcmds.command_type_exists(params[1]):
@@ -78,18 +92,27 @@ def _cmd_tempcmd(irc, hostmask, is_admin, args):
 
     log = prefs.get(irc, {}).get('tempcmd_log')
 
-    # Delete tempcmds
-    if cmd_type is None and cmd in ('del', 'delete', 'remove'):
-        if code.startswith(tempcmd_db.prefix):
-            r_cmd = repr(code)
-            cmd   = code[len(tempcmd_db.prefix):]
-        else:
-            r_cmd = repr(tempcmd_db.prefix + code)
-            cmd   = code
+    # Get tempcmd info
+    if cmd_type is None and cmd == 'info':
+        cmd, r_cmd = _get_tempcmd_name(code)
 
         if cmd not in tempcmd_db:
             return irc.msg(args[0], hostmask[0] + ': The command '
-                + repr(cmd) + ' does not exist or is not a tempcmd!')
+                + r_cmd + ' does not exist or is not a tempcmd!')
+
+        data = tempcmd_db[cmd]
+
+        return irc.msg(args[0], ('{}: The command {} is a {} tempcmd.'
+            '\nCode: `{}`').format(hostmask[0], r_cmd, repr(data.type),
+            data.code))
+
+    # Delete tempcmds
+    if cmd_type is None and cmd in ('del', 'delete', 'remove'):
+        cmd, r_cmd = _get_tempcmd_name(code)
+
+        if cmd not in tempcmd_db:
+            return irc.msg(args[0], hostmask[0] + ': The command '
+                + r_cmd + ' does not exist or is not a tempcmd!')
 
         del tempcmd_db[cmd]
         if log:
@@ -100,15 +123,11 @@ def _cmd_tempcmd(irc, hostmask, is_admin, args):
         return
 
     # Make sure the command does not start with the prefix
-    if cmd.startswith(tempcmd_db.prefix):
-        r_cmd = repr(cmd)
-        cmd   = cmd[len(tempcmd_db.prefix):]
-    else:
-        r_cmd = repr(tempcmd_db.prefix + cmd)
+    cmd, r_cmd = _get_tempcmd_name(cmd)
 
     # Make sure the command is not a non-tempcmd
     if cmd.lower() in commands:
-        return irc.msg(args[0], hostmask[0] + ': The command ' + rcmd +
+        return irc.msg(args[0], hostmask[0] + ': The command ' + r_cmd +
             ' already exists as a normal command!')
 
     # Add the command

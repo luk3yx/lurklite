@@ -264,7 +264,7 @@ def _command_string(irc, hostmask, channel, code, args):
     return result
 
 # Handle ACTIONs
-@register_command_type('action', unknown_re = r'\*.*\*$', _hex = 0x01)
+@register_command_type('action', unknown_re = r'^\*.*\*$', _hex = 0x01)
 def _command_action(irc, hostmask, channel, code, args):
     if code.startswith('*') and code.endswith('*'):
         code = code[1:-1]
@@ -273,7 +273,7 @@ def _command_action(irc, hostmask, channel, code, args):
 
 # Display an error if an unknown alias is tried and add aliases to the unknown
 #   command RegEx.
-@register_command_type('alias', unknown_re = r'\.', _hex = 0x02)
+@register_command_type('alias', unknown_re = r'^\.', _hex = 0x02)
 def _command_alias(irc, hostmask, channel, code, args):
     raise RecursionError('Maximum alias recursion depth exceeded.')
 
