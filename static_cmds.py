@@ -37,7 +37,10 @@ def _cmd_reboot(irc, hostmask, is_admin, args):
     irc.notice(args[0], '\x037\x1dRebooting...\x1d')
     print(is_admin, 'ordered me to reboot.')
     time.sleep(0.1)
-    os.execvp(sys.argv[0], sys.argv)
+    argv = list(sys.argv)
+    if argv[0] != sys.executable:
+        argv.insert(0, sys.executable)
+    os.execvp(sys.executable, argv)
 
 # Privs
 @register_command('privs', 'privileges')
