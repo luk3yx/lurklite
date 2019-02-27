@@ -76,7 +76,7 @@ def _cmd_tempcmd(irc, hostmask, is_admin, args):
         cmd_type = False
 
         if len(params) == 3:
-            params = [params[1], params[2].split(' ', 1)]
+            params = [params[1]] + params[2].split(' ', 1)
         else:
             del params[0]
 
