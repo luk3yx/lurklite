@@ -64,12 +64,16 @@ def process_ignores(section):
 global_ignores = process_ignores('core')
 prefs = {}
 
+# Make sure booleans are valid
+def _conf_bool(section, key, default = None):
+    try:
+        return config[section].getboolean(key, default)
+    except:
+        err('Config value {} (in section {})'.format(repr(key), repr(section)) +
+            ' contains an invalid boolean.')
+
 # Try getting the "reply_on_invalid" config line
-try:
-    _reply = config['core'].getboolean('reply_on_invalid')
-except:
-    err('Config value \'reply_on_invalid\' (in section \'core\') contains an'
-        ' invalid boolean.')
+_reply = _conf_bool('core', 'reply_on_invalid')
 
 # Create the commands database
 commands = tempcmds.CommandDatabase(config['core']['command_db'],
@@ -77,15 +81,15 @@ commands = tempcmds.CommandDatabase(config['core']['command_db'],
 del _reply
 
 # Get the "enable_static_cmds" flag
-try:
-    static_cmds = config['core'].getboolean('enable_static_cmds', True)
-except:
-    err('Config value \'enable_static_cmds\' (in section \'core\') contains an'
-        ' invalid boolean.')
+static_cmds = _conf_bool('core', 'enable_static_cmds', True)
 
 if static_cmds:
     import static_cmds
     static_cmds.tempcmd_db, static_cmds.prefs = commands, prefs
+
+# Get the disable yay/ouch flags
+disable_yay  = _conf_bool('core', 'disable_yay')
+disable_ouch = _conf_bool('core', 'disable_ouch')
 
 # Handle PRIVMSGs
 @miniirc.Handler('PRIVMSG')
@@ -118,9 +122,9 @@ def handle_privmsg(irc, hostmask, args):
     msg      = msg.lower()
 
     # Unprefixed commands here
-    if msg.startswith('yay'):
+    if not disable_yay and msg.startswith('yay'):
         irc.msg(args[0], reply_prefix + '\u200bYay!')
-    elif msg.startswith('ouch'):
+    elif not disable_ouch and msg.startswith('ouch'):
         irc.msg(args[0], reply_prefix + '\u200bOuch.')
     elif msg.startswith(irc.nick.lower() + '!'):
         irc.msg(args[0], reply_prefix + nick + '!')
@@ -195,11 +199,7 @@ for section in config.sections():
             ssl = 'ssl'
 
         if ssl:
-            try:
-                kwargs['ssl'] = c.getboolean(ssl)
-            except:
-                err('Config value \'ssl\' (in section {}) contains an invalid'
-                    ' boolean.', repr(section))
+            kwargs['ssl'] = _conf_bool(section, ssl)
 
         # Create the IRC object
         irc = miniirc.IRC(c['ip'], int(c['port']), c['nick'],

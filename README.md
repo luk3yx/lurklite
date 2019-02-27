@@ -19,6 +19,10 @@ prefix     = .
 
 # (Optional) A list of hostmasks to ignore.
 # ignored  = *!*@*/bot/*, baduser!*@*
+
+# (Optional) Disable "Yay!" and "Ouch." replies.
+# disable_yay  = false
+# disable_ouch = false
 ```
 
 ### Connecting to IRC servers
