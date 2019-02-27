@@ -96,15 +96,6 @@ def handle_privmsg(irc, hostmask, args):
     if global_ignores.match(h) or (_ignores and _ignores.match(h)):
         return
 
-    # Update the Discord server count
-    if 'next_update' in prefs[irc] and time.time() > prefs[irc]['next_update']:
-        c = irc.get_server_count()
-        irc.quote('AWAY', ':{} guild{}. | {}help'.format(
-            c, '' if c == 1 else 's', commands.prefix
-        ), tags = {'+discordapp.com/type': 'watching'})
-        irc.debug('Updated Discord status text.')
-        prefs[irc]['next_update'] = time.time() + 60
-
     # [off] handling
     msg = args[-1][1:]
     reply_prefix = ''
@@ -153,6 +144,15 @@ def handle_privmsg(irc, hostmask, args):
 
         # Call the command handler
         commands(irc, hostmask, args, reply_prefix = reply_prefix or None)
+
+    # Update the Discord server count
+    if 'next_update' in prefs[irc] and time.time() > prefs[irc]['next_update']:
+        c = irc.get_server_count()
+        irc.quote('AWAY', ':{} guild{}. | {}help'.format(
+            c, '' if c == 1 else 's', commands.prefix
+        ), tags = {'+discordapp.com/type': 'watching'})
+        irc.debug('Updated Discord status text.')
+        prefs[irc]['next_update'] = time.time() + 60
 
 # Add extra items
 def _add_extras(c, irc):
