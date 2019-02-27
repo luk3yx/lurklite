@@ -100,7 +100,7 @@ def _cmd_tempcmd(irc, hostmask, is_admin, args):
             return irc.msg(args[0], hostmask[0] + ': The command '
                 + r_cmd + ' does not exist or is not a tempcmd!')
 
-        data = tempcmd_db[cmd]
+        data = tempcmd_db.get(cmd, allowed_aliases = 0)
 
         return irc.msg(args[0], ('{}: The command {} is a {} tempcmd.'
             '\nCode: `{}`').format(hostmask[0], r_cmd, repr(data.type),
