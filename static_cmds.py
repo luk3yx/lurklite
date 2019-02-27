@@ -139,7 +139,7 @@ def _cmd_tempcmd(irc, hostmask, is_admin, args):
 
     # Get the type
     if not cmd_type:
-        cmd_type = tempcmd_db[cmd].type
+        cmd_type = tempcmd_db.get(cmd, allowed_aliases = 0).type
 
     # Return the message
     if log:
