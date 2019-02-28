@@ -179,6 +179,7 @@ def _add_extras(c, irc):
 
 # Get the IRC servers to connect to
 _servers = {}
+kwargs   = None
 for section in config.sections():
     if section == 'irc' or section.startswith('irc.'):
         _conf_assert(section, 'ip', ('port', int), 'nick', 'channels')
