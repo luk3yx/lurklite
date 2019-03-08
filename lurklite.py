@@ -108,13 +108,16 @@ def handle_privmsg(irc, hostmask, args):
         msg = msg[5:]
 
     # Relayed nick handling
-    if msg.startswith('<') and msg.endswith('>') and msg.isalnum():
-        _nick = msg.split(' ', 1)[0][1:-1]
-        hostmask = (
-            _nick + '@' + hostmask[0],
-            hostmask[1],
-            hostmask[2] + '/relayed/' + _nick
-        )
+    if msg.startswith('<'):
+        n = msg.split(' ', 1)
+        if n[0].endswith('>') and len(n) > 1 and msg[1].isalnum():
+            _nick = n[0][1:-1]
+            hostmask = (
+                _nick + '@' + hostmask[0],
+                hostmask[1],
+                hostmask[2] + '/relayed/' + _nick
+            )
+            msg = n[1]
 
     # Remove any leading/trailing spaces
     msg      = msg.strip(' \t\r\n')
@@ -127,7 +130,7 @@ def handle_privmsg(irc, hostmask, args):
     elif not disable_ouch and msg.startswith('ouch'):
         irc.msg(args[0], reply_prefix + '\u200bOuch.')
     elif msg.startswith(irc.nick.lower() + '!'):
-        irc.msg(args[0], reply_prefix + nick + '!')
+        irc.msg(args[0], reply_prefix + hostmask[0] + '!')
     else:
         # "Static" commands
         if static_cmds and msg.startswith(commands.prefix):
