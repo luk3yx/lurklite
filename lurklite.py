@@ -12,7 +12,7 @@ _parser.add_argument('config_file',
 _parser.add_argument('--verbose', '--debug', action = 'store_true',
     help = 'Enable verbose/debugging mode.')
 _parser.add_argument('-v', '--version', action = 'version',
-    version = 'lurklite v0.1.0')
+    version = 'lurklite v0.2.0')
 _args = _parser.parse_args()
 del _parser
 
@@ -251,7 +251,7 @@ irc.debug('Finished connecting to servers!')
 del c, irc, kwargs, _servers
 
 # miniirc update reminder™
-if miniirc.ver < (1,1,0):
+if miniirc.ver < (1,1,1):
     print('You are not running the latest version of miniirc™.')
 
 # Nuke more unused variables
