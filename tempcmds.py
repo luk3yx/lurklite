@@ -51,8 +51,13 @@ def run_raw_command(cmd_type, code, irc, hostmask, channel, args,
             action = False
 
         # Make sure the result is a sane length
-        if len(res) > 400:
-            res = res[:397] + '...'
+        if hasattr(irc, 'msglen'):
+            maxlen = irc.msglen - 112
+        else:
+            maxlen = 400
+
+        if len(res) > maxlen:
+            res = res[:maxlen] + '...'
 
         mention = hostmask[0]
         if not mention.endswith('>'):

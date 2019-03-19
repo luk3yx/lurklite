@@ -247,7 +247,7 @@ irc.debug('Finished connecting to servers!')
 del c, irc, kwargs, _servers
 
 # miniirc update reminder™
-if miniirc.ver < (1,0,9):
+if miniirc.ver < (1,1,0):
     print('You are not running the latest version of miniirc™.')
 
 # Nuke more unused variables
