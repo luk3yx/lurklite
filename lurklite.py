@@ -100,6 +100,10 @@ def handle_privmsg(irc, hostmask, args):
     if global_ignores.match(h) or (_ignores and _ignores.match(h)):
         return
 
+    # Handle PMs correctly
+    if args[0].lower() == irc.nick.lower():
+        args[0] = hostmask[0]
+
     # [off] handling
     msg = args[-1][1:]
     reply_prefix = ''
