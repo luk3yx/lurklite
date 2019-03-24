@@ -96,8 +96,9 @@ will be loaded and can define more powerful commands, for example:
 
 ```py
 # A simple version command
-@register_command('version')
-def _cmd_version(irc, hostmask, is_admin, args):
+# The "requires_admin" parameter is optional and defaults to False.
+@register_command('version', requires_admin = False)
+def version_command(irc, hostmask, is_admin, args):
     # irc: The miniirc.IRC (or miniirc_discord.Discord) object.
     # hostmask: The hostmask tuple, mostly from miniirc. Note that relayed
     #   messages (for example "<relayed_user> test") will have a hostmask
