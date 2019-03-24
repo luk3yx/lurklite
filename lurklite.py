@@ -87,6 +87,26 @@ if static_cmds:
     import static_cmds
     static_cmds.tempcmd_db, static_cmds.prefs = commands, prefs
 
+    # Get the custom commands file
+    custom_cmds = config['core'].get('custom_cmds')
+    if custom_cmds:
+        # Hacks to add a global variable
+        try:
+            with open(custom_cmds, 'r') as f:
+                custom_cmds = f.read()
+        except:
+            print('WARNING: Failed to read the custom commands file!')
+        else:
+            _custom_module = type(static_cmds)('custom_cmds')
+            _custom_module.register_command = static_cmds.register_command
+            exec(custom_cmds, _custom_module.__dict__)
+            del _custom_module
+
+        del custom_cmds
+elif 'custom_cmds' in config['core']:
+    print('WARNING: A custom commands path is specified, but static commands'
+        ' are disabled! The custom commands will not be loaded.')
+
 # Get the disable yay/ouch flags
 disable_yay  = _conf_bool('core', 'disable_yay')
 disable_ouch = _conf_bool('core', 'disable_ouch')
@@ -150,7 +170,7 @@ def handle_privmsg(irc, hostmask, args):
                 is_admin = admins and h.lower() in admins and h
 
                 # Launch the command
-                args[-1] = args[-1][len(cmd) + 3:]
+                args[-1] = args[-1][len(cmd) + len(commands.prefix) + 2:]
                 return static_cmds.commands[cmd](irc, hostmask, is_admin, args)
 
         # Call the command handler

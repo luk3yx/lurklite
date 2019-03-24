@@ -60,3 +60,4 @@ target/
 config.ini
 config-*.ini
 tempcmds.db
+custom_cmds.py

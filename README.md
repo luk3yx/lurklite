@@ -1,6 +1,6 @@
 # lurklite
 
-luk3yx's "lightweight™" IRC bot (excluding commands).
+luk3yx's "lightweight™" IRC and Discord bot (excluding commands).
 
 ## Config file
 
@@ -87,6 +87,34 @@ in `<code>` is not a valid type).
 To delete commands, you can use `tempcmd del/delete/remove <command>`. To create
 a command called `del`, `delete` or `remove`, you can prepend your bot's prefix
 to the command name.
+
+### Creating non-"tempcmd" commands
+
+If you want more fine-grained control over a command, you can add a
+`custom_cmds` line to the `[core]` section of config.ini. The file specified
+will be loaded and can define more powerful commands, for example:
+
+```py
+# A simple version command
+@register_command('version')
+def _cmd_version(irc, hostmask, is_admin, args):
+    # irc: The miniirc.IRC (or miniirc_discord.Discord) object.
+    # hostmask: The hostmask tuple, mostly from miniirc. Note that relayed
+    #   messages (for example "<relayed_user> test") will have a hostmask
+    #   similar to ('relayed_user@relay_bot', 'relay_bot_ident',
+    #       'relay.bot.host/relayed/relayed_user').
+    # is_admin: Either `False` or a string with the admin match (for example
+    #   a hostmask or Discord tag.
+    # args: ["#channel", "command parameters"]
+    #   For PMs, "#channel" will be the sender (hostmask[0]).
+
+    irc.msg(args[0], miniirc.version)
+```
+
+*You do not have to import anything to get `register_command`.*
+
+If you want your custom commands file in lurklite's source directory, you can
+name it `custom_cmds.py` to make `git` ignore it.
 
 ## Built-in commands
 
