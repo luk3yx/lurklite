@@ -9,6 +9,23 @@
 
 luk3yx's "lightweight™" IRC and Discord bot (excluding commands).
 
+## Official bot
+
+If you can't or don't want to run your own bot, you can request that the
+official bot be added to your channel.
+
+The official bot is available on the following IRC networks (PM luk3yx on any
+of them):
+
+ - EdgyIRC:  lurk
+ - Freenode: lurk\` *(or lurk3)*
+ - xeroxIRC: lurk *(or lurklite)*
+
+Alternatively, if you use Discord, you can use [https://bit.ly/lurkdiscord] to
+add lurklite (without any permissions) to your Discord guild/server.
+
+[https://bit.ly/lurkdiscord]: https://discordapp.com/oauth2/authorize?&client_id=525031486047387648&scope=bot&permissions=0
+
 ## Config file
 
 The lurklite config file has a format similar to `ini` files. It must have a
