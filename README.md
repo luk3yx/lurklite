@@ -1,3 +1,12 @@
+<div align="center">
+    <h1>
+        <img src="./lurklite.png"
+            width="128" alt=" " />
+        <br/>
+        lurklite
+    </h1>
+</div>
+
 # lurklite
 
 luk3yx's "lightweight™" IRC and Discord bot (excluding commands).
