@@ -7,8 +7,6 @@
     </h1>
 </div>
 
-# lurklite
-
 luk3yx's "lightweight™" IRC and Discord bot (excluding commands).
 
 ## Config file
