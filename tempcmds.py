@@ -67,7 +67,7 @@ def run_raw_command(cmd_type, code, irc, hostmask, channel, args,
         if action:
             irc.me(channel, '\u200b' + res)
         elif reply_prefix:
-            irc.msg(channel, reply_prefix, mention, res)
+            irc.msg(channel, reply_prefix + mention, res)
         else:
             irc.msg(channel, mention, res)
 

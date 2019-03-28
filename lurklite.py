@@ -128,7 +128,7 @@ def handle_privmsg(irc, hostmask, args):
     msg = args[-1][1:]
     reply_prefix = ''
     if msg.startswith('[off]'):
-        reply_prefix = '[off]'
+        reply_prefix = '[off] '
         msg = msg[5:]
 
     # Relayed nick handling
