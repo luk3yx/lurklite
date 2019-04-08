@@ -61,3 +61,5 @@ config.ini
 config-*.ini
 tempcmds.db
 custom_cmds.py
+custom_cmds/
+commands/

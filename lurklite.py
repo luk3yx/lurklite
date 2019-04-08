@@ -5,6 +5,9 @@
 
 import argparse, configparser, os, miniirc, re, sys, tempcmds, time
 
+# The version
+miniirc.version = 'lurklite v0.3.0 (powered by {})'.format(miniirc.version)
+
 # Process arguments
 _parser = argparse.ArgumentParser()
 _parser.add_argument('config_file',
@@ -12,7 +15,7 @@ _parser.add_argument('config_file',
 _parser.add_argument('--verbose', '--debug', action = 'store_true',
     help = 'Enable verbose/debugging mode.')
 _parser.add_argument('-v', '--version', action = 'version',
-    version = 'lurklite v0.2.0')
+    version = miniirc.version)
 _args = _parser.parse_args()
 del _parser
 
@@ -90,17 +93,7 @@ if static_cmds:
     # Get the custom commands file
     custom_cmds = config['core'].get('custom_cmds')
     if custom_cmds:
-        # Hacks to add a global variable
-        try:
-            with open(custom_cmds, 'r') as f:
-                custom_cmds = f.read()
-        except:
-            print('WARNING: Failed to read the custom commands file!')
-        else:
-            _custom_module = type(static_cmds)('custom_cmds')
-            _custom_module.register_command = static_cmds.register_command
-            exec(custom_cmds, _custom_module.__dict__)
-            del _custom_module
+        static_cmds.load_cmd_file(custom_cmds)
 
         del custom_cmds
 elif 'custom_cmds' in config['core']:

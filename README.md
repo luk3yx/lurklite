@@ -138,8 +138,10 @@ def version_command(irc, hostmask, is_admin, args):
 
 *You do not have to import anything to get `register_command`.*
 
-If you want your custom commands file in lurklite's source directory, you can
-name it `custom_cmds.py` to make `git` ignore it.
+If `custom_cmds` is a directory, all `.py` files in that directory will be
+loaded. If you want your custom commands file/directory in lurklite's source
+directory, you can name it `custom_cmds.py` (or, for directories, `custom_cmds`
+or `commands`) to make `git` ignore it.
 
 ## Built-in commands
 

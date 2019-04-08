@@ -26,6 +26,27 @@ def register_command(*cmds, requires_admin = False):
 
     return n
 
+# Load custom commands
+def load_cmd_file(file, *, recursive = True):
+    if recursive and os.path.isdir(file):
+        for f in os.listdir(file):
+            if f.endswith('.py'):
+                load_cmd_file(os.path.join(file, f), recursive = False)
+        return
+
+    # Hacks to add a global variable
+    try:
+        with open(file, 'r') as f:
+            custom_cmds = f.read()
+    except:
+        print('WARNING: Failed to read a custom commands file:', repr(file))
+        return
+
+    module = type(tempcmds)('custom_cmds')
+    module.__file__ = file
+    module.register_command = register_command
+    exec(custom_cmds, module.__dict__)
+
 # A simple version command
 @register_command('version')
 def _cmd_version(irc, hostmask, is_admin, args):
