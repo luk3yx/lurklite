@@ -3,7 +3,7 @@
 # "Static" commands
 #
 
-import miniirc, os, sys, tempcmds, time
+import miniirc, os, sys, lurklite.tempcmds as tempcmds, time
 
 commands   = {}
 prefs      = {}
