@@ -7,6 +7,11 @@
     </h1>
 </div>
 
+[![Available on PyPI.]](https://pypi.org/project/miniirc/) [![License: AGPLv3]](https://github.com/luk3yx/miniirc/blob/master/LICENSE.md)
+
+[Available on PyPI.]: https://img.shields.io/pypi/v/lurklite.svg
+[License: AGPLv3]: https://img.shields.io/pypi/l/lurklite.svg
+
 luk3yx's "lightweight™" IRC and Discord bot (excluding commands).
 
 ## Official bot
@@ -25,6 +30,12 @@ Alternatively, if you use Discord, you can use [https://bit.ly/lurkdiscord] to
 add lurklite (without any permissions) to your Discord guild/server.
 
 [https://bit.ly/lurkdiscord]: https://discordapp.com/oauth2/authorize?&client_id=525031486047387648&scope=bot&permissions=0
+
+## Installation
+
+To install lurklite, you can simply install it with `pip`
+(`sudo pip3 install miniirc` on most GNU/Linux distributions). After
+installation, you should be able to run `lurklite` (or `python3 -m lurklite`).
 
 ## Config file
 
