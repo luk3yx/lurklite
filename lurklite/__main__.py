@@ -7,7 +7,7 @@ import argparse, configparser, os, miniirc, re, sys, time
 import lurklite.tempcmds as tempcmds
 
 # The version
-miniirc.version = 'lurklite v0.3.0 (powered by {})'.format(miniirc.version)
+miniirc.version = 'lurklite v0.3.1 (powered by {})'.format(miniirc.version)
 
 # Process arguments
 _parser = argparse.ArgumentParser(prog = 'lurklite')
@@ -271,3 +271,7 @@ if miniirc.ver < (1,2,4):
 # Nuke more unused variables
 del argparse, _args
 del sys.modules['argparse']
+
+# TODO: Refactor code
+def main():
+    pass
