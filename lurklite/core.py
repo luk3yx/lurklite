@@ -8,7 +8,7 @@ import lurklite.tempcmds as tempcmds
 static_cmds = None
 
 # The version
-miniirc.version = 'lurklite v0.4.0 (powered by {})'.format(miniirc.version)
+miniirc.version = 'lurklite v0.4.1 (powered by {})'.format(miniirc.version)
 
 # Throw errors
 class BotError(Exception):
@@ -234,7 +234,7 @@ class Bot:
                 err('miniirc_discord is not installed, and a Discord account'
                     ' has been specified in the config file!')
 
-            _conf_assert('discord', 'token')
+            self._conf_assert('discord', 'token')
 
             c = config['discord']
 
