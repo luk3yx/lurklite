@@ -8,7 +8,7 @@ import lurklite.tempcmds as tempcmds
 static_cmds = None
 
 # The version
-miniirc.version = 'lurklite v0.4.1 (powered by {})'.format(miniirc.version)
+miniirc.version = 'lurklite v0.4.2 (powered by {})'.format(miniirc.version)
 
 # Throw errors
 class BotError(Exception):
@@ -240,7 +240,7 @@ class Bot:
 
             # Create the Discord object
             irc = miniirc_discord.Discord(c['token'], 0,
-                c.get('nick', '???'), debug = _args.verbose)
+                c.get('nick', '???'), debug = debug)
             _servers['Discord'] = irc
 
             # Add the ignores list
