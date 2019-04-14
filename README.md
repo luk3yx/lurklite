@@ -164,9 +164,10 @@ lurklite has the following built-in commands:
 
 ## Migrating from older versions of lurklite
 
-Older versions of lurklite had a `tempcmds.db` created using `repr()`. This is
-slow(-ish), so is no longer supported. If you still have an old `tempcmds.db`,
-you can run `tempcmds_migrate.py` to update it to the new msgpack/JSON format.
+Older versions of lurklite (pre-v0.1.0) had a `tempcmds.db` created using
+`repr()`. This is slow(-ish) and inefficient, so is no longer supported. If you
+still have a pre-v0.1.0 `tempcmds.db`, you can run
+`lurklite/tempcmds_migrate.py` to update it to the new msgpack/JSON format.
 
 [miniirc]: https://github.com/luk3yx/miniirc
 [miniirc_discord]: https://github.com/luk3yx/miniirc_discord
