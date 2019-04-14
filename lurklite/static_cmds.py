@@ -5,21 +5,24 @@
 
 import miniirc, os, sys, lurklite.tempcmds as tempcmds, time
 
-commands   = {}
-prefs      = {}
-tempcmd_db = None
+commands = {}
 
 # Register commands
-def register_command(*cmds, requires_admin = False):
+def register_command(*cmds, with_bot = False, requires_admin = False):
     def n(func):
         if requires_admin:
-            def wrap_cmd(irc, hostmask, is_admin, args):
-                if is_admin:
-                    return func(irc, hostmask, is_admin, args)
-                else:
+            def wrap_cmd(bot, irc, hostmask, is_admin, args):
+                if not is_admin:
                     irc.msg(args[0], 'Permission denied!')
+                elif with_bot:
+                    return func(bot, irc, hostmask, is_admin, args)
+                else:
+                    return func(irc, hostmask, is_admin, args)
+            wrap_cmd._lurklite_self = True
         else:
             wrap_cmd = func
+            if with_bot:
+                wrap_cmd._lurklite_self = True
 
         for cmd in cmds:
             commands[cmd.lower()] = wrap_cmd
@@ -73,23 +76,25 @@ def _cmd_privs(irc, hostmask, is_admin, args):
         irc.msg(args[0], '{}: You are not an admin!'.format(hostmask[0]))
 
 # Get a tempcmd name
-def _get_tempcmd_name(cmd):
-    if cmd.startswith(tempcmd_db.prefix):
+def _get_tempcmd_name(bot, cmd):
+    prefix = bot.cmd_db.prefix
+    if cmd.startswith(prefix):
         r_cmd = repr(cmd)
-        cmd   = cmd[len(tempcmd_db.prefix):]
+        cmd   = cmd[len(prefix):]
     else:
-        r_cmd = repr(tempcmd_db.prefix + cmd)
+        r_cmd = repr(prefix + cmd)
 
     return cmd, r_cmd
 
 # Add and remove "tempcmds"
-@register_command('tempcmd', 'tempcmds', requires_admin = True)
-def _cmd_tempcmd(irc, hostmask, is_admin, args):
+@register_command('tempcmd', 'tempcmds', with_bot = True, requires_admin = True)
+def _cmd_tempcmd(bot, irc, hostmask, is_admin, args):
     """
     Creates a "tempcmd".
     Usage: tempcmd del <command>
     """
 
+    tempcmd_db = bot.cmd_db
     assert tempcmd_db
 
     # Handle the arguments
@@ -114,11 +119,11 @@ def _cmd_tempcmd(irc, hostmask, is_admin, args):
     else:
         return irc.msg(args[0], hostmask[0] + ': Invalid syntax!')
 
-    log = prefs.get(irc, {}).get('tempcmd_log')
+    log = bot._prefs.get(irc, {}).get('tempcmd_log')
 
     # Get tempcmd info
     if cmd_type is None and cmd == 'info':
-        cmd, r_cmd = _get_tempcmd_name(code)
+        cmd, r_cmd = _get_tempcmd_name(bot, code)
 
         if cmd not in tempcmd_db:
             return irc.msg(args[0], hostmask[0] + ': The command '
@@ -132,7 +137,7 @@ def _cmd_tempcmd(irc, hostmask, is_admin, args):
 
     # Delete tempcmds
     if cmd_type is None and cmd in ('del', 'delete', 'remove'):
-        cmd, r_cmd = _get_tempcmd_name(code)
+        cmd, r_cmd = _get_tempcmd_name(bot, code)
 
         if cmd not in tempcmd_db:
             return irc.msg(args[0], hostmask[0] + ': The command '
@@ -147,7 +152,7 @@ def _cmd_tempcmd(irc, hostmask, is_admin, args):
         return
 
     # Make sure the command does not start with the prefix
-    cmd, r_cmd = _get_tempcmd_name(cmd)
+    cmd, r_cmd = _get_tempcmd_name(bot, cmd)
 
     # Make sure the command is not a non-tempcmd
     if cmd.lower() in commands:

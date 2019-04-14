@@ -13,3 +13,4 @@ print('WARNING: You are calling lurklite.py! lurklite is now a package, and '
 
 # Import lurklite
 import lurklite.__main__
+lurklite.__main__.main()

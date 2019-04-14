@@ -17,7 +17,8 @@ except ImportError:
 _command_types = {}
 _command_ids   = {}
 _unknown_regex = []
-def register_command_type(type_, *, unknown_re = None, _hex = None):
+def register_command_type(type_, use_config = False, *, unknown_re = None,
+        _hex = None):
     if unknown_re:
         _unknown_regex.insert(0, (re.compile(unknown_re), type_))
 
@@ -25,6 +26,8 @@ def register_command_type(type_, *, unknown_re = None, _hex = None):
         _command_ids[_hex] = type_
 
     def n(func):
+        if use_config:
+            func._tempcmds_config = True
         _command_types[type_] = func
         return func
 
@@ -34,11 +37,15 @@ def register_command_type(type_, *, unknown_re = None, _hex = None):
 command_type_exists = lambda type_ : type_ in _command_types
 
 # Run a command
-def run_raw_command(cmd_type, code, irc, hostmask, channel, args,
-  reply_prefix = None):
+def _run_raw_command(cmd_type, code, irc, hostmask, channel, args, *,
+        config = {}, reply_prefix = None):
     try:
         assert cmd_type in _command_types, 'Invalid command type!'
-        res = _command_types[cmd_type](irc, hostmask, channel, code, args)
+        handler = _command_types[cmd_type]
+        if hasattr(handler, '_tempcmds_config'):
+            res = handler(irc, hostmask, channel, code, config, args)
+        else:
+            res = handler(irc, hostmask, channel, code, args)
 
         # Sanity check
         assert type(res) == str, 'The command handler did not return a string!'
@@ -79,7 +86,8 @@ def run_raw_command(cmd_type, code, irc, hostmask, channel, args,
 
 # Command class
 class Command:
-    type = 'string'
+    type   = 'string'
+    config = {}
 
     def __eq__(self, other):
         return type(self) == type(other) and  self.type == other.type and \
@@ -103,8 +111,8 @@ class Command:
         }
 
     def __call__(self, irc, hostmask, args, *, reply_prefix = None):
-        return run_raw_command(self.type, self.code, irc, hostmask, args[0],
-            args[1:], reply_prefix = reply_prefix)
+        return _run_raw_command(self.type, self.code, irc, hostmask, args[0],
+            args[1:], config = self.config, reply_prefix = reply_prefix)
 
     def __init__(self, cmdinfo = {}, **kwargs):
         if type(cmdinfo) in (list, tuple) and len(cmdinfo) == 3:
@@ -170,6 +178,7 @@ class CommandDatabase:
         # Convert the command dict/str to a Command object and resolve aliases.
         if res:
             res = Command(res)
+            res.config = self._config
 
             if res.type == 'alias' and allowed_aliases > 0:
                 if res.code.startswith('.'):
@@ -245,18 +254,14 @@ class CommandDatabase:
 
     # Init
     def __init__(self, location = 'commands.db', prefix = None, *,
-      reply_on_invalid = False,
-      update_interval = 10):
+            reply_on_invalid = False, update_interval = 10, config = {}):
         self.location         = location
         self.reply_on_invalid = reply_on_invalid
         self.prefix           = prefix or '{}|'.format(os.getpid())
+        self._config          = config
         self._data            = {}
         self._lock            = threading.Lock()
         self._update_interval = update_interval
-
-
-# Create a dummy config
-config = {}
 
 # Handle format strings
 @register_command_type('string', _hex = 0x00)
@@ -299,8 +304,8 @@ def _command_url(irc, hostmask, channel, code, args):
     return data
 
 # Remotely execute Python2 lambdas
-@register_command_type('lambda', unknown_re = 'lambda', _hex = 0x04)
-def _command_lambda(irc, hostmask, channel, code, args):
+@register_command_type('lambda', True, unknown_re = 'lambda', _hex = 0x04)
+def _command_lambda(irc, hostmask, channel, code, config, args):
     if not code.startswith('lambda'):
         code = 'lambda ' + code
 
@@ -320,8 +325,8 @@ def _command_lambda(irc, hostmask, channel, code, args):
     return res
 
 # Remotely execute node.js functions
-@register_command_type('nodejs', unknown_re = 'function', _hex = 0x05)
-def _command_nodejs(irc, hostmask, channel, code, args):
+@register_command_type('nodejs', True, unknown_re = 'function', _hex = 0x05)
+def _command_nodejs(irc, hostmask, channel, code, config, args):
     code = web_quote('({}){}'.format(code, tuple(args)))
     code = config.get('nodejs_url',
         'https://untitled-2khw8qubudu1.runkit.sh/') + ('?code={}&nick={}'
