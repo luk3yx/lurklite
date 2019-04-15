@@ -47,7 +47,7 @@ The lurklite config file has a format similar to `ini` files. It must have a
 # The tempcmd db, commands added with .tempcmd are stored here.
 # If you have msgpack installed, this database will be slightly smaller and
 #   faster to read/write to/from.
-tempcmd_db = /path/to/tempcmd/database
+command_db = /path/to/tempcmd/database
 
 # The bot's command prefix.
 prefix     = .

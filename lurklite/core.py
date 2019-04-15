@@ -8,7 +8,7 @@ import lurklite.tempcmds as tempcmds
 static_cmds = None
 
 # The version
-miniirc.version = 'lurklite v0.4.2 (powered by {})'.format(miniirc.version)
+miniirc.version = 'lurklite v0.4.3 (powered by {})'.format(miniirc.version)
 
 # Throw errors
 class BotError(Exception):
@@ -53,7 +53,7 @@ class Bot:
 
         # Process the ignores list
         if 'ignored' in c:
-            p['ignored'] = process_ignores(section)
+            p['ignored'] = self.process_ignores(section)
 
         # Process the admins list
         if 'admins' in c:
