@@ -8,7 +8,7 @@ import lurklite.tempcmds as tempcmds
 static_cmds = None
 
 # The version
-miniirc.version = 'lurklite v0.4.3 (powered by {})'.format(miniirc.version)
+miniirc.version = 'lurklite v0.4.4 (powered by {})'.format(miniirc.version)
 
 # Throw errors
 class BotError(Exception):
@@ -46,8 +46,16 @@ class Bot:
             err('Config value {} (in section {})'.format(repr(key),
                 repr(section)) + ' contains an invalid boolean.')
 
+    # Convert an ignores list into a RegEx
+    def process_ignores(self, section):
+        res = set()
+        for victim in self.config[section].get('ignored', '').split(','):
+            victim = victim.strip()
+            res.add(re.escape(victim).lower().replace('\\*', '.*'))
+        return re.compile('^(' + ')|('.join(res) + ')$')
+
     # Add extra items
-    def _add_extras(self, c, irc):
+    def _add_extras(self, section, c, irc):
         p = {}
         self._prefs[irc] = p
 
@@ -64,14 +72,6 @@ class Bot:
         # Add the tempcmds log channel
         if 'tempcmd_log' in c:
             p['tempcmd_log'] = c['tempcmd_log']
-
-    # Convert an ignores list into a RegEx
-    def process_ignores(self, section):
-        res = set()
-        for victim in self.config[section].get('ignored', '').split(','):
-            victim = victim.strip()
-            res.add(re.escape(victim).lower().replace('\\*', '.*'))
-        return re.compile('^(' + ')|('.join(res) + ')$')
 
     # Handle PRIVMSGs
     def handle_privmsg(self, irc, hostmask, args):
@@ -224,7 +224,7 @@ class Bot:
                 _servers[section] = irc
 
                 # Add the ignores list
-                self._add_extras(c, irc)
+                self._add_extras(section, c, irc)
 
         # Get the Discord bot account (if any)
         if 'discord' in config:
@@ -244,7 +244,7 @@ class Bot:
             _servers['Discord'] = irc
 
             # Add the ignores list
-            self._add_extras(c, irc)
+            self._add_extras('discord', c, irc)
             self._prefs[irc]['next_update'] = 0
 
         # Mass connect
