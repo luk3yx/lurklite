@@ -75,8 +75,8 @@ channels = #botwar,#other-channel
 # List of hostmasks to ignore (optional)
 # ignored = *!*@*/bot/*, *!*sopel*@*
 
-# List of hostmasks for admins
-# admins = *!*@unaffiliated/user
+# List of hostnames for admins
+# admins = unaffiliated/user
 ```
 
 The following optional values may be added to the above config, and are sent
