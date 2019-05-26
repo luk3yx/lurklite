@@ -152,15 +152,15 @@ class CommandDatabase:
             return
 
         with self._lock:
-            with open(self.location, 'rb') as f:
-                try:
+            try:
+                with open(self.location, 'rb') as f:
                     data = f.read()
                     if not msgpack or data.startswith(b'{'):
                         self._data = json.loads(data)
                     else:
                         self._data = msgpack.loads(data, raw = False)
-                except Exception as e:
-                    print('WARNING: Unable to read commands database!', repr(e))
+            except Exception as e:
+                print('WARNING: Unable to read commands database!', repr(e))
 
             self._next_update = time.time() + self._update_interval
 
