@@ -8,7 +8,7 @@ import miniirc, os, sys, lurklite.tempcmds as tempcmds, time
 commands = {}
 
 # Register commands
-def register_command(*cmds, with_bot = False, requires_admin = False):
+def register_command(*cmds, with_bot=False, requires_admin=False):
     def n(func):
         if requires_admin:
             def wrap_cmd(bot, irc, hostmask, is_admin, args):
@@ -30,11 +30,11 @@ def register_command(*cmds, with_bot = False, requires_admin = False):
     return n
 
 # Load custom commands
-def load_cmd_file(file, *, recursive = True):
+def load_cmd_file(file, *, recursive=True):
     if recursive and os.path.isdir(file):
         for f in os.listdir(file):
             if f.endswith('.py'):
-                load_cmd_file(os.path.join(file, f), recursive = False)
+                load_cmd_file(os.path.join(file, f), recursive=False)
         return
 
     # Hacks to add a global variable
@@ -56,7 +56,7 @@ def _cmd_version(irc, hostmask, is_admin, args):
     irc.msg(args[0], miniirc.version)
 
 # Reboot
-@register_command('reboot', requires_admin = True)
+@register_command('reboot', requires_admin=True)
 def _cmd_reboot(irc, hostmask, is_admin, args):
     irc.notice(args[0], '\x037\x1dRebooting...\x1d')
     print(is_admin, 'ordered me to reboot.')
@@ -87,7 +87,7 @@ def _get_tempcmd_name(bot, cmd):
     return cmd, r_cmd
 
 # Add and remove "tempcmds"
-@register_command('tempcmd', 'tempcmds', with_bot = True, requires_admin = True)
+@register_command('tempcmd', 'tempcmds', with_bot=True, requires_admin=True)
 def _cmd_tempcmd(bot, irc, hostmask, is_admin, args):
     """
     Creates a "tempcmd".
@@ -129,7 +129,7 @@ def _cmd_tempcmd(bot, irc, hostmask, is_admin, args):
             return irc.msg(args[0], hostmask[0] + ': The command '
                 + r_cmd + ' does not exist or is not a tempcmd!')
 
-        data = tempcmd_db.get(cmd, allowed_aliases = 0)
+        data = tempcmd_db.get(cmd, allowed_aliases=0)
 
         return irc.msg(args[0], ('{}: The command {} is a {} tempcmd.'
             '\nCode: `{}`').format(hostmask[0], r_cmd, repr(data.type),
@@ -168,7 +168,7 @@ def _cmd_tempcmd(bot, irc, hostmask, is_admin, args):
 
     # Get the type
     if not cmd_type:
-        cmd_type = tempcmd_db.get(cmd, allowed_aliases = 0).type
+        cmd_type = tempcmd_db.get(cmd, allowed_aliases=0).type
 
     # Return the message
     if log:

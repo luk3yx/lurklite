@@ -37,8 +37,7 @@ def migrate(file):
 if __name__ == '__main__':
     import argparse
     _parser = argparse.ArgumentParser()
-    _parser.add_argument('file',
-        help = 'The tempcmds file to "upgrade".')
+    _parser.add_argument('file', help='The tempcmds file to "upgrade".')
     args = _parser.parse_args()
 
     migrate(args.file)

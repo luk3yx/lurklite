@@ -8,7 +8,7 @@ import lurklite.tempcmds as tempcmds
 static_cmds = None
 
 # The version
-miniirc.version = 'lurklite v0.4.5 (powered by {})'.format(miniirc.version)
+miniirc.version = 'lurklite v0.4.6 (powered by {})'.format(miniirc.version)
 
 # Throw errors
 class BotError(Exception):
@@ -39,7 +39,7 @@ class Bot:
                         '{}.', repr(key), repr(section), req.__name__)
 
     # Make sure booleans are valid
-    def _conf_bool(self, section, key, default = None):
+    def _conf_bool(self, section, key, default=None):
         try:
             return self.config[section].getboolean(key, default)
         except:
@@ -86,7 +86,7 @@ class Bot:
             args[0] = hostmask[0]
 
         # [off] handling
-        msg = args[-1][1:]
+        msg = args[-1]
         reply_prefix = ''
         if msg.startswith('[off]'):
             reply_prefix = '[off] '
@@ -106,7 +106,7 @@ class Bot:
 
         # Remove any leading/trailing spaces
         msg      = msg.strip(' \t\r\n')
-        args[-1] = ':' + msg
+        args[-1] = msg
         msg      = msg.lower()
 
         # Unprefixed commands here
@@ -132,7 +132,7 @@ class Bot:
                     is_admin = admins and h.lower() in admins and h
 
                     # Launch the command
-                    args[-1] = args[-1][len(cmd) + len(prefix) + 2:]
+                    args[-1] = args[-1][len(cmd) + len(prefix) + 1:]
                     func = static_cmds.commands[cmd]
                     if hasattr(func, '_lurklite_self'):
                         return func(self, irc, hostmask, is_admin, args)
@@ -140,8 +140,7 @@ class Bot:
                         return func(irc, hostmask, is_admin, args)
 
             # Call the command handler
-            self.cmd_db(irc, hostmask, args,
-                reply_prefix = reply_prefix or None)
+            self.cmd_db(irc, hostmask, args, reply_prefix=reply_prefix or None)
 
         # Update the Discord server count
         if 'next_update' in self._prefs[irc] and \
@@ -154,7 +153,7 @@ class Bot:
             self._prefs[irc]['next_update'] = time.time() + 60
 
     # The init function
-    def __init__(self, config, *, debug = False):
+    def __init__(self, config, *, debug=False):
         self.config = config
         if 'core' not in config:
             err('Invalid or non-existent config file!')
@@ -168,8 +167,8 @@ class Bot:
         else:
             tempcmds_config = {}
         self.cmd_db = tempcmds.CommandDatabase(config['core']['command_db'],
-            config = tempcmds_config, prefix = config['core']['prefix'],
-            reply_on_invalid = self._conf_bool('core', 'reply_on_invalid'))
+            config=tempcmds_config, prefix=config['core']['prefix'],
+            reply_on_invalid=self._conf_bool('core', 'reply_on_invalid'))
 
         # Get the "enable_static_cmds" flag
         global static_cmds
@@ -219,8 +218,8 @@ class Bot:
 
                 # Create the IRC object
                 irc = miniirc.IRC(c['ip'], int(c['port']), c['nick'],
-                    c['channels'].split(','), auto_connect = False,
-                    debug = debug, **kwargs)
+                    c['channels'].split(','), auto_connect=False,
+                    debug=debug, **kwargs)
                 _servers[section] = irc
 
                 # Add the ignores list
@@ -240,7 +239,7 @@ class Bot:
 
             # Create the Discord object
             irc = miniirc_discord.Discord(c['token'], 0,
-                c.get('nick', '???'), debug = debug)
+                c.get('nick', '???'), debug=debug)
             _servers['Discord'] = irc
 
             # Add the ignores list
@@ -251,10 +250,11 @@ class Bot:
         for name in _servers:
             irc = _servers[name]
             irc.debug('Connecting to ' + repr(name) + '...')
-            irc.Handler('PRIVMSG')(self.handle_privmsg)
+            irc.Handler('PRIVMSG', colon=False)(self.handle_privmsg)
             irc.connect()
         irc.debug('Finished connecting to servers!')
 
 # miniirc update reminder™
-if miniirc.ver < (1,2,4):
-    print('You are not running the latest version of miniirc™.')
+assert miniirc.ver >= (1,4,0), 'lurklite requires miniirc >= v1.4.0!'
+# if miniirc.ver < (1,4,0):
+#     print('You are not running the latest version of miniirc™.')

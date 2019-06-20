@@ -7,7 +7,7 @@
     </h1>
 </div>
 
-[![Available on PyPI.]](https://pypi.org/project/miniirc/) [![License: AGPLv3]](https://github.com/luk3yx/miniirc/blob/master/LICENSE.md)
+[![Available on PyPI.]](https://pypi.org/project/lurklite/) [![License: AGPLv3]](https://github.com/luk3yx/miniirc/blob/master/LICENSE.md)
 
 [Available on PyPI.]: https://img.shields.io/pypi/v/lurklite.svg
 [License: AGPLv3]: https://img.shields.io/pypi/l/lurklite.svg
@@ -132,7 +132,7 @@ will be loaded and can define more powerful commands, for example:
 ```py
 # A simple version command
 # The "requires_admin" parameter is optional and defaults to False.
-@register_command('version', requires_admin = False)
+@register_command('version', requires_admin=False)
 def version_command(irc, hostmask, is_admin, args):
     # irc: The miniirc.IRC (or miniirc_discord.Discord) object.
     # hostmask: The hostmask tuple, mostly from miniirc. Note that relayed
@@ -167,7 +167,7 @@ lurklite has the following built-in commands:
 Older versions of lurklite (pre-v0.1.0) had a `tempcmds.db` created using
 `repr()`. This is slow(-ish) and inefficient, so is no longer supported. If you
 still have a pre-v0.1.0 `tempcmds.db`, you can run
-`lurklite/tempcmds_migrate.py` to update it to the new msgpack/JSON format.
+`tempcmds_migrate.py` to update it to the new msgpack/JSON format.
 
 [miniirc]: https://github.com/luk3yx/miniirc
 [miniirc_discord]: https://github.com/luk3yx/miniirc_discord
