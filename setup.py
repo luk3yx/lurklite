@@ -18,7 +18,7 @@ setup(
 
     long_description              = desc,
     long_description_content_type = 'text/markdown',
-    install_requires              = ['miniirc>=1.4.0'],
+    install_requires              = ['miniirc>=1.4.0', 'msgpack'],
     python_requires               = '>=3.4',
 
     classifiers = [
