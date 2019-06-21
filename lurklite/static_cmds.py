@@ -60,11 +60,19 @@ def _cmd_version(irc, hostmask, is_admin, args):
 def _cmd_reboot(irc, hostmask, is_admin, args):
     irc.notice(args[0], '\x037\x1dRebooting...\x1d')
     print(is_admin, 'ordered me to reboot.')
-    time.sleep(0.1)
+    time.sleep(0.3)
     argv = list(sys.argv)
     if argv[0] != sys.executable:
         argv.insert(0, sys.executable)
     os.execvp(sys.executable, argv)
+
+# Shutdown
+@register_command('die', 'shutdown', requires_admin = True)
+def _cmd_die(irc, hostmask, is_admin, args):
+    irc.notice(args[0], '\x037\x1dGoodbye, cruel world!\x1d')
+    print(is_admin, 'ordered me to die.')
+    time.sleep(0.3)
+    os._exit(0)
 
 # Privs
 @register_command('privs', 'privileges')
