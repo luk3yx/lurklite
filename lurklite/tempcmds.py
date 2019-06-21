@@ -267,9 +267,12 @@ class CommandDatabase:
 @register_command_type('string', _hex=0x00)
 def _command_string(irc, hostmask, channel, code, args):
     _a = ' '.join(args)
-    result = code.format(*args, nick=hostmask[0], sender=channel,
-        host=hostmask[2], hostmask='{}!{}@{}'.format(*hostmask), args=_a,
-        ARGS=_a.upper(), NICK=hostmask[0].upper())
+    try:
+        result = code.format(*args, nick=hostmask[0], sender=channel,
+            host=hostmask[2], hostmask='{}!{}@{}'.format(*hostmask), args=_a,
+            ARGS=_a.upper(), NICK=hostmask[0].upper())
+    except IndexError:
+        return 'Invalid parameters!'
 
     return result
 
