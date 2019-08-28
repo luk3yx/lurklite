@@ -256,5 +256,5 @@ class Bot:
 
 # miniirc update reminder™
 assert miniirc.ver >= (1,4,0), 'lurklite requires miniirc >= v1.4.0!'
-# if miniirc.ver < (1,4,0):
-#     print('You are not running the latest version of miniirc™.')
+if miniirc.ver < (1,4,2):
+    print('You are not running the latest version of miniirc™.')
