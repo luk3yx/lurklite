@@ -17,14 +17,9 @@ luk3yx's "lightweight™" IRC and Discord bot (excluding commands).
 ## Official bot
 
 If you can't or don't want to run your own bot, you can request that the
-official bot be added to your channel.
-
-The official bot is available on the following IRC networks (PM luk3yx on any
-of them):
-
- - EdgyIRC:  lurk
- - Freenode: lurk\` *(or lurk3)*
- - xeroxIRC: lurk *(or lurklite)*
+official bot be added to your channel. The official bot is on a few IRC
+networks, most notably Freenode and xeroxIRC. PM `luk3yx` on either of those if
+you want the official bot in an IRC channel you own.
 
 Alternatively, if you use Discord, you can use [https://bit.ly/lurkdiscord] to
 add lurklite (without any permissions) to your Discord guild/server.
