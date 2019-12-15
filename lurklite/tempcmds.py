@@ -170,7 +170,8 @@ class CommandDatabase:
                 with open(self.location, 'rb') as f:
                     data = f.read()
                     if not msgpack or data.startswith(b'{'):
-                        self._data = json.loads(data)
+                        self._data = json.loads(data.decode('utf-8',
+                                                            'replace'))
                     else:
                         self._data = msgpack.loads(data, raw=False)
             except Exception as e:
