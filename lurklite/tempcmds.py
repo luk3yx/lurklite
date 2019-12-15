@@ -142,7 +142,21 @@ class Command:
 class CommandDatabase:
     _next_update = 0
 
-    # __repr__
+    def __init__(self, location='commands.db', prefix=None, *,
+            reply_on_invalid=False, update_interval=10, config={},
+            use_ascii_format=False):
+        self.location         = location
+        self.reply_on_invalid = reply_on_invalid
+        self.prefix           = prefix or '{}|'.format(os.getpid())
+        self._config          = config
+        self._data            = {}
+        self._lock            = threading.Lock()
+        self._update_interval = update_interval
+
+        # Note that the database format is auto-detected on load, this only
+        # modifies the format used to save the database.
+        self.db_format = config.get('db_format', 'msgpack').lower()
+
     def __repr__(self):
         return 'tempcmds.CommandDatabase(' + repr(self.location) + ')'
 
@@ -222,7 +236,7 @@ class CommandDatabase:
             else:
                 self._data[item] = value
 
-            if msgpack:
+            if msgpack and self.db_format != 'json':
                 with open(self.location, 'wb') as f:
                     f.write(msgpack.dumps(self._data))
             else:
@@ -251,17 +265,6 @@ class CommandDatabase:
                 irc.debug('User {} tried to execute invalid command {}'.format(
                     hostmask, repr(cmd)
                 ))
-
-    # Init
-    def __init__(self, location='commands.db', prefix=None, *,
-            reply_on_invalid=False, update_interval=10, config={}):
-        self.location         = location
-        self.reply_on_invalid = reply_on_invalid
-        self.prefix           = prefix or '{}|'.format(os.getpid())
-        self._config          = config
-        self._data            = {}
-        self._lock            = threading.Lock()
-        self._update_interval = update_interval
 
 # Handle format strings
 @register_command_type('string', _hex=0x00)

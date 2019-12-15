@@ -139,9 +139,8 @@ def _cmd_tempcmd(bot, irc, hostmask, is_admin, args):
 
         data = tempcmd_db.get(cmd, allowed_aliases=0)
 
-        return irc.msg(args[0], ('{}: The command {} is a {} tempcmd.'
-            '\nCode: `{}`').format(hostmask[0], r_cmd, repr(data.type),
-            data.code))
+        return irc.msg(args[0], ('{}: The command {} is a {!r} tempcmd.'
+            '\nCode: `{}`').format(hostmask[0], r_cmd, data.type, data.code))
 
     # Delete tempcmds
     if cmd_type is None and cmd in ('del', 'delete', 'remove'):
@@ -153,9 +152,8 @@ def _cmd_tempcmd(bot, irc, hostmask, is_admin, args):
 
         del tempcmd_db[cmd]
         if log:
-            irc.msg(log, 'User {} deleted temporary command {}.'.format(
-                repr(is_admin), r_cmd
-            ))
+            irc.msg(log, 'User {!r} deleted temporary command {}.'.format(
+                is_admin, r_cmd))
         irc.msg(args[0], hostmask[0] + ': Command ' + r_cmd + ' deleted.')
         return
 
@@ -180,9 +178,8 @@ def _cmd_tempcmd(bot, irc, hostmask, is_admin, args):
 
     # Return the message
     if log:
-        irc.msg(log, 'User {} {} temporary command {} (of type {}): {}'.format(
-            repr(is_admin), verb, r_cmd, repr(cmd_type), repr(code)
-        ))
-    irc.msg(args[0], '{}: Command {} (of type {}) {}.'.format(
-        hostmask[0], r_cmd, repr(cmd_type), verb
+        irc.msg(log, ('User {!r} {} temporary command {} (of type {!r}): '
+            '{!r}').format(is_admin, verb, r_cmd, cmd_type, code))
+    irc.msg(args[0], '{}: Command {} (of type {!r}) {}.'.format(
+        hostmask[0], r_cmd, cmd_type, verb
     ))

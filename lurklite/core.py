@@ -8,7 +8,7 @@ import lurklite.tempcmds as tempcmds
 static_cmds = None
 
 # The version
-miniirc.version = 'lurklite v0.4.7 (powered by {})'.format(miniirc.version)
+miniirc.version = 'lurklite v0.4.8 (powered by {})'.format(miniirc.version)
 
 # Throw errors
 class BotError(Exception):
@@ -256,5 +256,5 @@ class Bot:
 
 # miniirc update reminder™
 assert miniirc.ver >= (1,4,0), 'lurklite requires miniirc >= v1.4.0!'
-if miniirc.ver < (1,4,2):
+if miniirc.ver < (1,5,0):
     print('You are not running the latest version of miniirc™.')

@@ -104,6 +104,20 @@ slightly more RAM if `[discord]` exists, as [miniirc_discord] will be imported
 (and if you don't specify a Discord bot token, [miniirc_discord] won't be
 imported).
 
+### Storing the command database in an ASCII-safe format.
+
+If you have the habit of opening and modifying `commands.db` in a text editor,
+it might be a good idea to store it with JSON by adding the following to your
+configuration file:
+
+```ini
+[tempcmds]
+db_format = json
+```
+
+*Note that this will very slightly degrade performance, however it should be a
+negligible amount for most purposes.*
+
 ## Creating commands
 
 Once your bot has connected to IRC (or Discord), you can use `tempcmd` to
