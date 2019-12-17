@@ -115,8 +115,8 @@ configuration file:
 db_format = json
 ```
 
-*Note that this will very slightly degrade performance, however it should be a
-negligible amount for most purposes.*
+*Note that this will very slightly degrade performance and increase the size,
+however this should be a negligible amount for most purposes.*
 
 ## Creating commands
 
