@@ -85,10 +85,9 @@ def _cmd_die(irc, hostmask, is_admin, args):
 @register_command('privs', 'privileges')
 def _cmd_privs(irc, hostmask, is_admin, args):
     if is_admin:
-        irc.msg(args[0], '{}: You are an admin: `{}`.'.format(hostmask[0],
-            is_admin))
+        irc.msg(args[0], f'{hostmask[0]}: You are an admin: `{is_admin}`.')
     else:
-        irc.msg(args[0], '{}: You are not an admin!'.format(hostmask[0]))
+        irc.msg(args[0], f'{hostmask[0]}: You are not an admin!')
 
 # Get a tempcmd name
 def _get_tempcmd_name(bot, cmd):
@@ -146,8 +145,8 @@ def _cmd_tempcmd(bot, irc, hostmask, is_admin, args):
 
         data = tempcmd_db.get(cmd, allowed_aliases=0)
 
-        return irc.msg(args[0], ('{}: The command {} is a {!r} tempcmd.'
-            '\nCode: `{}`').format(hostmask[0], r_cmd, data.type, data.code))
+        return irc.msg(args[0], f'{hostmask[0]}: The command {r_cmd} is a '
+            f'{data.type!r} tempcmd.\nCode: `{data.code}`')
 
     # Delete tempcmds
     if cmd_type is None and cmd in ('del', 'delete', 'remove'):
@@ -159,8 +158,8 @@ def _cmd_tempcmd(bot, irc, hostmask, is_admin, args):
 
         del tempcmd_db[cmd]
         if log:
-            irc.msg(log, 'User {!r} deleted temporary command {}.'.format(
-                is_admin, r_cmd))
+            irc.msg(log, f'User {is_admin!r} deleted temporary command '
+                f'{r_cmd}.')
         irc.msg(args[0], hostmask[0] + ': Command ' + r_cmd + ' deleted.')
         return
 
@@ -185,8 +184,7 @@ def _cmd_tempcmd(bot, irc, hostmask, is_admin, args):
 
     # Return the message
     if log:
-        irc.msg(log, ('User {!r} {} temporary command {} (of type {!r}): '
-            '{!r}').format(is_admin, verb, r_cmd, cmd_type, code))
-    irc.msg(args[0], '{}: Command {} (of type {!r}) {}.'.format(
-        hostmask[0], r_cmd, cmd_type, verb
-    ))
+        irc.msg(log, f'User {is_admin!r} {verb} temporary command {r_cmd} '
+            f'(of type {cmd_type!r}): {code!r}')
+    irc.msg(args[0], f'{hostmask[0]}: Command {r_cmd} (of type {cmd_type!r}) '
+        f'{verb}.')

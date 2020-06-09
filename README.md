@@ -7,8 +7,9 @@
     </h1>
 </div>
 
-[![Available on PyPI.]](https://pypi.org/project/lurklite/) [![License: AGPLv3]](https://github.com/luk3yx/miniirc/blob/master/LICENSE.md)
+![Python 3.6+] [![Available on PyPI.]](https://pypi.org/project/lurklite/) [![License: AGPLv3]](https://github.com/luk3yx/miniirc/blob/master/LICENSE.md)
 
+[Python 3.6+]: https://img.shields.io/badge/python-3.6+-blue.svg
 [Available on PyPI.]: https://img.shields.io/pypi/v/lurklite.svg
 [License: AGPLv3]: https://img.shields.io/pypi/l/lurklite.svg
 
@@ -172,7 +173,7 @@ lurklite has the following built-in commands:
  - `tempcmd`: Create and delete commands.
  - `version`: Display the miniirc version and quit.
 
-## Migrating from older versions of lurklite
+## Migrating from very old versions of lurklite
 
 Older versions of lurklite (pre-v0.1.0) had a `tempcmds.db` created using
 `repr()`. This is slow(-ish) and inefficient, so is no longer supported. If you

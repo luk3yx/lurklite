@@ -259,13 +259,10 @@ class CommandDatabase:
             if cmd in self:
                 self[cmd](irc, hostmask, cmd_args, reply_prefix=reply_prefix)
             elif self.reply_on_invalid:
-                irc.msg(args[0], '{}: Invalid command: {}'.format(
-                    hostmask[0], repr(cmd)
-                ))
+                irc.msg(args[0], f'{hostmask[0]}: Invalid command: {cmd!r}')
             elif irc.debug_file:
-                irc.debug('User {} tried to execute invalid command {}'.format(
-                    hostmask, repr(cmd)
-                ))
+                irc.debug(f'User {hostmask} tried to execute invalid command '
+                          f'{cmd!r}')
 
 # Handle format strings
 @register_command_type('string', _hex=0x00)
@@ -315,10 +312,9 @@ def _command_lambda(irc, hostmask, channel, code, config, args):
     if not code.startswith('lambda'):
         code = 'lambda ' + code
 
-    code = 'from __future__ import division, generators, nested_scopes,'   \
-        'print_function, unicode_literals; __builtins__[\'chr\'] = unichr' \
-        '; hostmask = {}; print("|", ({}){}, "|")'.format(hostmask, code,
-        tuple(args))
+    code = (f'from __future__ import division, generators, nested_scopes,'
+            f'print_function, unicode_literals; __builtins__[\'chr\'] = unichr'
+            f'; hostmask = {hostmask}; print("|", ({code}){tuple(args)}, "|")')
     code = config.get('lambda_url',
         'https://tumbolia-two.appspot.com/py/') + web_quote(code)
     res  = _command_url(irc, hostmask, channel, code, args)
@@ -333,9 +329,8 @@ def _command_lambda(irc, hostmask, channel, code, config, args):
 # Remotely execute node.js functions
 @register_command_type('nodejs', True, unknown_re='function', _hex=0x05)
 def _command_nodejs(irc, hostmask, channel, code, config, args):
-    code = web_quote('({}){}'.format(code, tuple(args)))
-    code = config.get('nodejs_url',
-        'https://untitled-2khw8qubudu1.runkit.sh/') + ('?code={}&nick={}'
-        '&channel={}&host={}').format(code, web_quote(hostmask[0]),
-        web_quote(channel), web_quote(hostmask[-1]))
+    code = web_quote(f'({code}){tuple(args)}')
+    baseurl = config.get('nodejs_url', 'https://untitled-2khw8qubudu1.runkit.sh/')
+    code = (f'{baseurl}?code={code}&nick={web_quote(hostmask[0])}'
+            f'&channel={web_quote(channel)}&host={web_quote(hostmask[-1])}')
     return _command_url(irc, hostmask, channel, code, args)

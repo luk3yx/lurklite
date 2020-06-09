@@ -8,7 +8,7 @@ import lurklite.tempcmds as tempcmds
 static_cmds = None
 
 # The version
-miniirc.version = 'lurklite v0.4.9 (powered by {})'.format(miniirc.version)
+miniirc.version = f'lurklite v0.4.10 (powered by {miniirc.version})'
 
 # Throw errors
 class BotError(Exception):
@@ -43,8 +43,8 @@ class Bot:
         try:
             return self.config[section].getboolean(key, default)
         except:
-            err('Config value {} (in section {})'.format(repr(key),
-                repr(section)) + ' contains an invalid boolean.')
+            err(f'Config value {key!r} (in section {section!r}) contains an '
+                f'invalid boolean.')
 
     # Convert an ignores list into a RegEx
     def process_ignores(self, section):
@@ -133,7 +133,7 @@ class Bot:
                         if (host.startswith('discord/user/<') and
                                 host[15:-1] in admins):
                             # Admin from user ID
-                            is_admin = '#' + host[15:-1]
+                            is_admin = host[15:-1]
                         elif ('#' in hostmask[1] and
                                 hostmask[1].lower() in admins):
                             # Admin from username#discriminator
@@ -270,5 +270,5 @@ class Bot:
 
 # miniirc update reminder™
 assert miniirc.ver >= (1,4,0), 'lurklite requires miniirc >= v1.4.0!'
-if miniirc.ver < (1,5,0):
+if miniirc.ver < (1,6,2):
     print('You are not running the latest version of miniirc™.')

@@ -7,7 +7,7 @@ with open('README.md', 'r') as f:
 
 setup(
     name        = 'lurklite',
-    version     = '0.4.9',
+    version     = '0.4.10',
     packages    = ['lurklite'],
     author      = 'luk3yx',
     description = 'A miniirc-based IRC bot.',
@@ -19,7 +19,7 @@ setup(
     long_description              = desc,
     long_description_content_type = 'text/markdown',
     install_requires              = ['miniirc>=1.4.0', 'msgpack'],
-    python_requires               = '>=3.4',
+    python_requires               = '>=3.6',
 
     classifiers = [
         'Development Status :: 5 - Production/Stable',

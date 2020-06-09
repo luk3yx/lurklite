@@ -25,7 +25,7 @@ def main():
     try:
         core.Bot(config, debug=args.verbose)
     except core.BotError as e:
-        print('ERROR: {}'.format(e), file=sys.stderr)
+        print(f'ERROR: {e}', file=sys.stderr)
         raise SystemExit(1)
 
 # Call main() if required.
