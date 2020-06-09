@@ -96,7 +96,8 @@ following config section:
 # You need miniirc_discord installed for this to work.
 token    = your-discord-token
 
-# admins = userid#1234
+# Using user IDs instead of username#discriminator improves security.
+# admins = username#1234, userid
 ```
 
 You can only have one Discord connection per bot process, and lurklite will use

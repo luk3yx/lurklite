@@ -8,7 +8,7 @@ import lurklite.tempcmds as tempcmds
 static_cmds = None
 
 # The version
-miniirc.version = 'lurklite v0.4.8 (powered by {})'.format(miniirc.version)
+miniirc.version = 'lurklite v0.4.9 (powered by {})'.format(miniirc.version)
 
 # Throw errors
 class BotError(Exception):
@@ -124,12 +124,26 @@ class Bot:
 
                 if cmd in static_cmds.commands:
                     # Decide if the user is an admin
+                    admins = self._prefs[irc].get('admins', ())
+                    host = hostmask[2]
+
                     if type(irc).__name__ == 'Discord':
-                        h = hostmask[1]
+                        # Discord privileges are checked against both the user
+                        # ID and username#discriminator.
+                        if (host.startswith('discord/user/<') and
+                                host[15:-1] in admins):
+                            # Admin from user ID
+                            is_admin = '#' + host[15:-1]
+                        elif ('#' in hostmask[1] and
+                                hostmask[1].lower() in admins):
+                            # Admin from username#discriminator
+                            is_admin = hostmask[1]
+                        else:
+                            # Not an admin
+                            is_admin = False
                     else:
-                        h = hostmask[2]
-                    admins = self._prefs[irc].get('admins')
-                    is_admin = admins and h.lower() in admins and h
+                        # IRC privileges are just checked against the hostname.
+                        is_admin = host.lower() in admins and host
 
                     # Launch the command
                     args[-1] = args[-1][len(cmd) + len(prefix) + 1:]
