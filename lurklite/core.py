@@ -8,7 +8,7 @@ import lurklite.tempcmds as tempcmds
 static_cmds = None
 
 # The version
-miniirc.version = f'lurklite v0.4.10 (powered by {miniirc.version})'
+miniirc.version = f'lurklite v0.4.11 (powered by {miniirc.version})'
 
 # Throw errors
 class BotError(Exception):
@@ -247,13 +247,20 @@ class Bot:
                 err('miniirc_discord is not installed, and a Discord account'
                     ' has been specified in the config file!')
 
+            if getattr(miniirc_discord, 'ver', ()) < (0,5,18):
+                print('Support for this version of miniirc_discord will be '
+                    'removed in the future.')
+                kw = {}
+            else:
+                kw = {'stateless_mode': True}
+
             self._conf_assert('discord', 'token')
 
             c = config['discord']
 
             # Create the Discord object
             irc = miniirc_discord.Discord(c['token'], 0,
-                c.get('nick', '???'), debug=debug)
+                c.get('nick', '???'), debug=debug, **kw)
             _servers['Discord'] = irc
 
             # Add the ignores list

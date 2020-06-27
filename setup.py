@@ -7,7 +7,7 @@ with open('README.md', 'r') as f:
 
 setup(
     name        = 'lurklite',
-    version     = '0.4.10',
+    version     = '0.4.11',
     packages    = ['lurklite'],
     author      = 'luk3yx',
     description = 'A miniirc-based IRC bot.',
