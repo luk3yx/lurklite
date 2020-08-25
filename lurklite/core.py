@@ -8,7 +8,7 @@ import lurklite.tempcmds as tempcmds
 static_cmds = None
 
 # The version
-miniirc.version = f'lurklite v0.4.11 (powered by {miniirc.version})'
+miniirc.version = f'lurklite v0.4.12 (powered by {miniirc.version})'
 
 # Throw errors
 class BotError(Exception):
@@ -272,7 +272,11 @@ class Bot:
             irc = _servers[name]
             irc.debug('Connecting to ' + repr(name) + '...')
             irc.Handler('PRIVMSG', colon=False)(self.handle_privmsg)
-            irc.connect()
+            try:
+                irc.connect()
+            except Exception as exc:
+                print(f'Failed to connect to {name!r} - '
+                      f'{exc.__class__.__name__}: {exc}')
         irc.debug('Finished connecting to servers!')
 
 # miniirc update reminder™
