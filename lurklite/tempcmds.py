@@ -313,8 +313,9 @@ def _command_lambda(irc, hostmask, channel, code, config, args):
         code = 'lambda ' + code
 
     code = (f'from __future__ import division, generators, nested_scopes,'
-            f'print_function, unicode_literals; __builtins__[\'chr\'] = unichr'
-            f'; hostmask = {hostmask}; print("|", ({code}){tuple(args)}, "|")')
+            f'print_function, unicode_literals; from six import unichr as chr,'
+            f'exec_; hostmask = {hostmask}; print("|", ({code}){tuple(args)}, '
+            f'"|")')
     code = config.get('lambda_url',
         'https://tumbolia-two.appspot.com/py/') + web_quote(code)
     res  = _command_url(irc, hostmask, channel, code, args)
