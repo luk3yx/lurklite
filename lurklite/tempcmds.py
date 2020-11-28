@@ -315,9 +315,17 @@ def _command_lambda(irc, hostmask, channel, code, config, args):
     code = (f'from __future__ import division, generators, nested_scopes,'
             f'print_function, unicode_literals; __builtins__[\'chr\'] = unichr'
             f'; hostmask = {hostmask}; print("|", ({code}){tuple(args)}, "|")')
-    code = config.get('lambda_url',
-        'https://tumbolia-two.appspot.com/py/') + web_quote(code)
-    res  = _command_url(irc, hostmask, channel, code, args)
+    lambda_url = config.get('lambda_url',
+        'https://tumbolia-two.appspot.com/py/')
+    code = lambda_url + web_quote(code)
+    res = _command_url(irc, hostmask, channel, code, args)
+
+    # Horrible workaround
+    if lambda_url == 'https://tumbolia-two.appspot.com/py/':
+        try:
+            res = res.encode('latin-1').decode('utf-8')
+        except UnicodeError:
+            pass
 
     if res.startswith('TypeError: <lambda>() takes '):
         res = 'Invalid syntax! This command ' + res[22:] + '.'

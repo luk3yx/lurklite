@@ -8,7 +8,7 @@ import lurklite.tempcmds as tempcmds
 static_cmds = None
 
 # The version
-miniirc.version = f'lurklite v0.4.12 (powered by {miniirc.version})'
+miniirc.version = f'lurklite v0.4.15 (powered by {miniirc.version})'
 
 # Throw errors
 class BotError(Exception):
