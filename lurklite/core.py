@@ -8,7 +8,7 @@ import lurklite.tempcmds as tempcmds
 static_cmds = None
 
 # The version
-miniirc.version = f'lurklite v0.4.15 (powered by {miniirc.version})'
+miniirc.version = f'lurklite v0.4.16 (powered by {miniirc.version})'
 
 # Throw errors
 class BotError(Exception):
@@ -228,7 +228,7 @@ class Bot:
                     ssl = 'ssl'
 
                 if ssl:
-                    kwargs['ssl'] = _conf_bool(section, ssl)
+                    kwargs['ssl'] = self._conf_bool(section, ssl)
 
                 # Create the IRC object
                 irc = miniirc.IRC(c['ip'], int(c['port']), c['nick'],
