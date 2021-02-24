@@ -61,7 +61,7 @@ def _cmd_reboot(irc, hostmask, is_admin, args):
     irc.notice(args[0], '\x037\x1dRebooting...\x1d')
     print(is_admin, 'ordered me to reboot.')
     time.sleep(0.3)
-    argv = list(sys.argv)
+    argv = (sys.executable, '-m', 'lurklite', *sys.argv[1:])
 
     if os.name == 'posix':
         # On POSIX systems, just use execvp().
