@@ -19,8 +19,8 @@ luk3yx's "lightweight™" IRC and Discord bot (excluding commands).
 
 If you can't or don't want to run your own bot, you can request that the
 official bot be added to your channel. The official bot is on a few IRC
-networks, most notably Freenode and xeroxIRC. PM `luk3yx` on either of those if
-you want the official bot in an IRC channel you own.
+networks, most notably xeroxIRC. PM `luk3yx` there if you want the bot on an
+IRC channel you own.
 
 Alternatively, if you use Discord, you can use [https://bit.ly/lurkdiscord] to
 add lurklite (without any permissions) to your Discord guild/server.
@@ -58,12 +58,12 @@ prefix     = .
 
 ### Connecting to IRC servers
 
-You can then create sections starting with `irc.` (for example `irc.freenode`)
+You can then create sections starting with `irc.` (for example `irc.mynetwork`)
 to connect to IRC servers:
 
 ```ini
-[irc.freenode]
-ip   = chat.freenode.net
+[irc.mynetwork]
+ip   = irc.example.com
 port = 6697
 nick = testbot
 channels = #botwar,#other-channel
