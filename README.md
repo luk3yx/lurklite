@@ -19,8 +19,10 @@ luk3yx's "lightweight™" IRC and Discord bot (excluding commands).
 
 If you can't or don't want to run your own bot, you can request that the
 official bot be added to your channel. The official bot is on a few IRC
-networks, most notably xeroxIRC. PM `luk3yx` there if you want the bot on an
-IRC channel you own.
+networks, most notably Libera Chat and xeroxIRC. PM `luk3yx` there if you want
+the bot on an IRC channel you own. *Note that this IRC bot is running
+[Sopel](https://github.com/sopel-irc/sopel) and not lurklite, hopefully I'll
+release the API shim it uses sometime.*
 
 Alternatively, if you use Discord, you can use [https://bit.ly/lurkdiscord] to
 add lurklite (without any permissions) to your Discord guild/server.
