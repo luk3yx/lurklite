@@ -3,8 +3,10 @@
 # Command handler - Processes commands
 #
 
-import json, os, re, threading, time, urllib.request
-from urllib.parse import quote as web_quote
+import json, os, re, threading, time, urllib.request, urllib.parse
+
+def web_quote(string):
+    return urllib.parse.quote(string, '')
 
 # Try importing msgpack
 try:
