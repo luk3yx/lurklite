@@ -3,12 +3,12 @@
 # lurklite core
 #
 
-import os, miniirc, re, sys, time
+import concurrent.futures, os, miniirc, re, sys, time
 import lurklite.tempcmds as tempcmds
 static_cmds = None
 
 # The version
-miniirc.version = f'lurklite v0.4.19 (powered by {miniirc.version})'
+miniirc.version = f'lurklite v0.4.20 (powered by {miniirc.version})'
 
 # Throw errors
 class BotError(Exception):
@@ -209,6 +209,8 @@ class Bot:
         self.disable_yay  = self._conf_bool('core', 'disable_yay')
         self.disable_ouch = self._conf_bool('core', 'disable_ouch')
 
+        thread_pool = concurrent.futures.ThreadPoolExecutor(32)
+
         # Get the IRC servers to connect to
         _servers = {}
         kwargs   = None
@@ -238,7 +240,7 @@ class Bot:
                 # Create the IRC object
                 irc = miniirc.IRC(c['ip'], int(c['port']), c['nick'],
                     c['channels'].split(','), auto_connect=False,
-                    debug=debug, **kwargs)
+                    debug=debug, executor=thread_pool, **kwargs)
                 _servers[section] = irc
 
                 # Add the ignores list
@@ -265,7 +267,7 @@ class Bot:
 
             # Create the Discord object
             irc = miniirc_discord.Discord(c['token'], 0,
-                c.get('nick', '???'), debug=debug, **kw)
+                c.get('nick', '???'), debug=debug, executor=thread_pool, **kw)
             _servers['Discord'] = irc
 
             # Add the ignores list
@@ -284,7 +286,5 @@ class Bot:
                       f'{exc.__class__.__name__}: {exc}')
         irc.debug('Finished connecting to servers!')
 
-# miniirc update reminder™
-assert miniirc.ver >= (1,4,0), 'lurklite requires miniirc >= v1.4.0!'
-if miniirc.ver < (1,6,2):
-    print('You are not running the latest version of miniirc™.')
+# Ensure miniirc isn't outdated
+assert miniirc.ver >= (1,7,0), 'lurklite requires miniirc >= v1.7.0!'

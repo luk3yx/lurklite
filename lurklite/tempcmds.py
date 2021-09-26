@@ -301,7 +301,8 @@ def _command_url(irc, hostmask, channel, code, args):
     code = code.format(*[web_quote(a) for a in args],
         args = web_quote(' '.join(args)), nick = web_quote(hostmask[0]))
 
-    data = urllib.request.urlopen(code).read().decode('utf-8', 'replace')
+    with urllib.request.urlopen(code, timeout=5) as res:
+        data = res.read().decode('utf-8', 'replace')
 
     while data[-1:] in '\r\n':
         data = data[:-1]
