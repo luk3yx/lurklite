@@ -119,7 +119,7 @@ class Bot:
             irc.msg(args[0], reply_prefix + '\u200bYay!')
         elif not self.disable_ouch and msg.startswith('ouch'):
             irc.msg(args[0], reply_prefix + '\u200bOuch.')
-        elif msg.startswith(irc.nick.lower() + '!'):
+        elif msg.startswith(irc.current_nick.lower() + '!'):
             irc.msg(args[0], reply_prefix + hostmask[0] + '!')
         else:
             # "Static" commands
