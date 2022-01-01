@@ -89,6 +89,28 @@ realname      = realname
 ssl           = true
 ```
 
+### Connecting to Matrix servers
+
+You can connect to Matrix (using [miniirc_matrix]) with this config section:
+
+```ini
+[matrix]
+homeserver = example.com
+token = your-matrix-token
+admins = @yourusername:example.com
+```
+
+Obtaining a token is currently not very straightforward. You can use the
+following Python code. Note that if you execute this in an interactive Python
+shell it will likely save both the username and password in its history file.
+
+```py
+import miniirc_matrix
+print(miniirc_matrix.login('example.com', 'botusername', 'password'))
+```
+
+The bot will automatically accept invites from admins.
+
 ### Connecting to Discord servers
 
 You can also connect to Discord servers (via [miniirc_discord]) with the
@@ -183,4 +205,5 @@ still have a pre-v0.1.0 `tempcmds.db`, you can run
 `tempcmds_migrate.py` to update it to the new msgpack/JSON format.
 
 [miniirc]: https://github.com/luk3yx/miniirc
+[miniirc_matrix]: https://github.com/luk3yx/miniirc_matrix
 [miniirc_discord]: https://github.com/luk3yx/miniirc_discord

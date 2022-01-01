@@ -8,7 +8,7 @@ import lurklite.tempcmds as tempcmds
 static_cmds = None
 
 # The version
-miniirc.version = f'lurklite v0.4.20 (powered by {miniirc.version})'
+miniirc.version = f'lurklite v0.4.21 (powered by {miniirc.version})'
 
 # Throw errors
 class BotError(Exception):
@@ -63,6 +63,11 @@ class Bot:
     def _add_extras(self, section, c, irc):
         p = {}
         self._prefs[irc] = p
+
+        # Add message handlers
+        irc.Handler('PRIVMSG', colon=False)(self.handle_privmsg)
+        if section != 'discord':
+            irc.Handler('INVITE', colon=False)(self._handle_invite)
 
         # Process the ignores list
         if 'ignored' in c:
@@ -171,6 +176,12 @@ class Bot:
             irc.debug('Updated Discord status text.')
             self._prefs[irc]['next_update'] = time.time() + 60
 
+    # Accept invites from admins
+    def _handle_invite(self, irc, hostmask, args):
+        admins = self._prefs[irc].get('admins', ())
+        if hostmask[2] in admins:
+            irc.send('JOIN', args[-1])
+
     # The init function
     def __init__(self, config, *, debug=False):
         self.config = config
@@ -256,7 +267,7 @@ class Bot:
 
             if getattr(miniirc_discord, 'ver', ()) < (0,5,18):
                 print('Support for this version of miniirc_discord will be '
-                    'removed in the future.')
+                      'removed in the future.')
                 kw = {}
             else:
                 kw = {'stateless_mode': True}
@@ -274,11 +285,24 @@ class Bot:
             self._add_extras('discord', c, irc)
             self._prefs[irc]['next_update'] = 0
 
+        if 'matrix' in config:
+            try:
+                import miniirc_matrix
+            except ImportError:
+                err('miniirc_matrix is not installed, and a Matrix account'
+                    ' has been specified in the config file!')
+
+            self._conf_assert('matrix', 'homeserver', 'token')
+            c = config['matrix']
+            irc = miniirc_matrix.Matrix(c['homeserver'], auto_connect=False,
+                                        debug=debug, token=c['token'])
+            _servers['Matrix'] = irc
+            self._add_extras('matrix', c, irc)
+
         # Mass connect
         for name in _servers:
             irc = _servers[name]
             irc.debug('Connecting to ' + repr(name) + '...')
-            irc.Handler('PRIVMSG', colon=False)(self.handle_privmsg)
             try:
                 irc.connect()
             except Exception as exc:
