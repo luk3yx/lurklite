@@ -92,7 +92,7 @@ class Bot:
             return
 
         # Handle PMs correctly
-        if args[0].lower() == irc.nick.lower():
+        if args[0].lower() == irc.current_nick.lower():
             args[0] = hostmask[0]
 
         # [off] handling
