@@ -23,10 +23,12 @@ def main():
 
     # Create the bot
     try:
-        core.Bot(config, debug=args.verbose)
+        bot = core.Bot(config, debug=args.verbose)
     except core.BotError as e:
         print(f'ERROR: {e}', file=sys.stderr)
         raise SystemExit(1)
+
+    bot.wait_until_disconnected()
 
 # Call main() if required.
 if __name__ == '__main__':

@@ -8,7 +8,7 @@ import lurklite.tempcmds as tempcmds
 static_cmds = None
 
 # The version
-miniirc.version = f'lurklite v0.4.21 (powered by {miniirc.version})'
+miniirc.version = f'lurklite v0.4.22 (powered by {miniirc.version})'
 
 # Throw errors
 class BotError(Exception):
@@ -300,15 +300,19 @@ class Bot:
             self._add_extras('matrix', c, irc)
 
         # Mass connect
-        for name in _servers:
-            irc = _servers[name]
+        for name, irc in _servers.items():
             irc.debug('Connecting to ' + repr(name) + '...')
             try:
                 irc.connect()
             except Exception as exc:
                 print(f'Failed to connect to {name!r} - '
                       f'{exc.__class__.__name__}: {exc}')
+
         irc.debug('Finished connecting to servers!')
 
+    def wait_until_disconnected(self):
+        for irc in self._prefs:
+            irc.wait_until_disconnected()
+
 # Ensure miniirc isn't outdated
-assert miniirc.ver >= (1,7,0), 'lurklite requires miniirc >= v1.7.0!'
+assert miniirc.ver >= (1,8,0), 'lurklite requires miniirc >= v1.8.0!'
