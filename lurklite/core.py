@@ -8,7 +8,7 @@ import lurklite.tempcmds as tempcmds
 static_cmds = None
 
 # The version
-miniirc.version = f'lurklite v0.4.22 (powered by {miniirc.version})'
+miniirc.version = f'lurklite v0.4.23 (powered by {miniirc.version})'
 
 # Throw errors
 class BotError(Exception):
@@ -82,6 +82,9 @@ class Bot:
         # Add the tempcmds log channel
         if 'tempcmd_log' in c:
             p['tempcmd_log'] = c['tempcmd_log']
+
+        if self._conf_bool(section, 'auto_accept_invites', False):
+            p['auto_accept_invites'] = True
 
     # Handle PRIVMSGs
     def handle_privmsg(self, irc, hostmask, args):
@@ -178,8 +181,9 @@ class Bot:
 
     # Accept invites from admins
     def _handle_invite(self, irc, hostmask, args):
-        admins = self._prefs[irc].get('admins', ())
-        if hostmask[2] in admins:
+        prefs = self._prefs[irc]
+        if (prefs.get('auto_accept_invites') or
+                hostmask[2].lower() in prefs.get('admins', ())):
             irc.send('JOIN', args[-1])
 
     # The init function
