@@ -8,7 +8,7 @@ import lurklite.tempcmds as tempcmds
 static_cmds = None
 
 # The version
-miniirc.version = f'lurklite v0.4.24 (powered by {miniirc.version})'
+miniirc.version = f'lurklite v0.4.25 (powered by {miniirc.version})'
 
 # Throw errors
 class BotError(Exception):
@@ -57,7 +57,7 @@ class Bot:
         regex_ignore = self.config[section].get('regex_ignore', '').strip()
         if regex_ignore:
             res.add(regex_ignore)
-        return re.compile('^(' + ')|('.join(res) + ')$')
+        return re.compile('^(' + ')|('.join(res) + ')$', re.IGNORECASE)
 
     # Add extra items
     def _add_extras(self, section, c, irc):
