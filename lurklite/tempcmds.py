@@ -35,6 +35,10 @@ def register_command_type(type_, use_config=False, *, unknown_re=None,
 
     return n
 
+# Check if a command type exists
+def command_type_exists(cmd_type):
+    return cmd_type in _command_types
+
 # Run a command
 def _run_raw_command(cmd_type, code, irc, hostmask, channel, args, *,
         config={}, reply_prefix=None):
