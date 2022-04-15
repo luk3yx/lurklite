@@ -35,9 +35,6 @@ def register_command_type(type_, use_config=False, *, unknown_re=None,
 
     return n
 
-# Check if a command type exists
-command_type_exists = lambda type_ : type_ in _command_types
-
 # Run a command
 def _run_raw_command(cmd_type, code, irc, hostmask, channel, args, *,
         config={}, reply_prefix=None):
@@ -304,10 +301,7 @@ def _command_url(irc, hostmask, channel, code, args):
     with urllib.request.urlopen(code, timeout=5) as res:
         data = res.read().decode('utf-8', 'replace')
 
-    while data[-1:] in '\r\n':
-        data = data[:-1]
-
-    return data
+    return data.rstrip('\r\n')
 
 # Remotely execute Python2 lambdas
 @register_command_type('lambda', True, unknown_re='lambda', _hex=0x04)
