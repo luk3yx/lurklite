@@ -3,12 +3,12 @@
 # lurklite core
 #
 
-import concurrent.futures, os, miniirc, re, sys, time
+import concurrent.futures, miniirc, re, time
 import lurklite.tempcmds as tempcmds
 static_cmds = None
 
 # The version
-miniirc.version = f'lurklite v0.4.26 (powered by {miniirc.version})'
+miniirc.version = f'lurklite v0.4.27 (powered by {miniirc.version})'
 
 # Throw errors
 class BotError(Exception):
@@ -298,8 +298,11 @@ class Bot:
 
             self._conf_assert('matrix', 'homeserver', 'token')
             c = config['matrix']
+            ssl = True
+            if 'ssl' in c:
+                ssl = self._conf_bool('matrix', 'ssl')
             irc = miniirc_matrix.Matrix(c['homeserver'], auto_connect=False,
-                                        debug=debug, token=c['token'])
+                                        debug=debug, token=c['token'], ssl=ssl)
             _servers['Matrix'] = irc
             self._add_extras('matrix', c, irc)
 

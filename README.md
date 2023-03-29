@@ -31,9 +31,8 @@ add lurklite (without any permissions) to your Discord guild/server.
 
 ## Installation
 
-To install lurklite, you can simply install it with `pip`
-(`sudo pip3 install lurklite` on most GNU/Linux distributions). After
-installation, you should be able to run `lurklite` (or `python3 -m lurklite`).
+To install lurklite, you can simply install it with `pipx install lurklite`.
+After installation, you should be able to run `lurklite`.
 
 ## Config file
 
