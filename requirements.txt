@@ -1,1 +1,2 @@
 miniirc==1.9.1
+miniirc_discord==0.6.1
