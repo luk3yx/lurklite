@@ -24,10 +24,7 @@ the bot on an IRC channel you own. *Note that this IRC bot is running
 [Sopel](https://github.com/sopel-irc/sopel) and not lurklite, hopefully I'll
 release the API shim it uses sometime.*
 
-Alternatively, if you use Discord, you can use [https://bit.ly/lurkdiscord] to
-add lurklite (without any permissions) to your Discord guild/server.
-
-[https://bit.ly/lurkdiscord]: https://discordapp.com/oauth2/authorize?&client_id=525031486047387648&scope=bot&permissions=0
+Alternatively, if you use Discord, you can [use this link to add lurklite to your Discord server](https://discordapp.com/oauth2/authorize?&client_id=525031486047387648&scope=bot&permissions=0).
 
 ## Installation
 
